@@ -1,0 +1,30 @@
+.board_button {
+  width: 18%;
+  height: 18%;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.button_image {
+  width: 80%;
+  height: 80%;
+  position: relative;
+}
+
+.selected {
+  border: solid black;
+}
+
+.rock {
+  background-color: red;
+}
+
+.scissors {
+  background-color: silver;
+}
+
+.paper {
+  background-color: purple;
+}

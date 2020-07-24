@@ -8,6 +8,15 @@
   margin-left: 0;
 }
 
+.game_board {
+  width: 30vw;
+  height: 30vw;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  justify-content: center;
+}
+
 .rock {
   background-color: red;
 }
