@@ -1,5 +1,5 @@
 import React from "react";
-import Main from "../src/Components/Main/Main.js";
+import Board from "../src/Components/Board/Board";
 import "./App.css";
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <h1>TOE SCISSORS</h1>
       <h2>It's like Rock-Paper-Scissors and Tic-Tac-Toe</h2>
-      <Main />
+      <Board />
     </div>
   );
 }

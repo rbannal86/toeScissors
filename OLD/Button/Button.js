@@ -40,7 +40,11 @@ const Button = (props) => {
   if (props.currentSelect.id === props.button.id && !props.button.userMove)
     classModifier = "selected";
 
-  return (
+  return props.button.owner ? (
+    <button className={"board_button "}>
+      {props.button.owner === "user" ? "X" : "O"}
+    </button>
+  ) : (
     <button
       className={"board_button " + classModifier}
       onClick={() => props.handleClick(props.button.id)}
