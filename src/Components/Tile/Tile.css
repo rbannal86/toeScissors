@@ -24,3 +24,7 @@
 .userscissors {
   background-color: slategray;
 }
+
+.currentTie {
+  background-color: yellow;
+}

@@ -13,12 +13,20 @@ export default function HandleTie(props) {
     let aiMove = AI.aiTie();
     let outcome = checkBoard.compareMoves(userMove, aiMove);
     if (outcome === "tie") setTie(true);
+    else {
+      props.updateBoardAfterTie(props.tieList[0], outcome);
+      let updatedList = props.tieList;
+      updatedList.shift();
+      console.log(updatedList);
+      if (updatedList.length === 0) props.setTieToggle(false);
+      props.setTieList(updatedList);
+    }
   };
 
   return (
     <div className={"handle_tie_main"}>
       {tie ? (
-        <h2>You Tied! Select Again.</h2>
+        <h2>You tied again! Select a new move!</h2>
       ) : (
         <h2>You tied on this tile. Select a new move!</h2>
       )}

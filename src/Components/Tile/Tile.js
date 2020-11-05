@@ -37,14 +37,25 @@ export default function Tile(props) {
   };
 
   let aiMove;
-  if (props.tileState.aiMove !== "none") aiMove = "ai_move";
+  if (props.tileState.aiMove !== "none" && !props.tileState.outcome)
+    aiMove = "ai_move";
+
+  let userMoveTag;
+  if (userMove !== "none" && !props.tileState.outcome) userMoveTag = userMove;
 
   let outcome;
   if (props.tileState.outcome) outcome = props.tileState.outcome;
 
+  let tieFocus;
+  if (props.tieList.length > 0 && props.tieList[0] === props.tileIndex)
+    tieFocus = "currentTie";
+
   let handleClick = () => {};
 
-  if (userMove === "none" || props.currentTile === props.tileIndex) {
+  if (
+    (userMove === "none" || props.currentTile === props.tileIndex) &&
+    props.tieList.length === 0
+  ) {
     handleClick = () => {
       if (props.currentTile !== props.tileIndex) {
         props.setCurrentTile(props.tileIndex);
@@ -55,7 +66,7 @@ export default function Tile(props) {
 
   return (
     <div
-      className={"tile_main " + aiMove + " user" + userMove}
+      className={"tile_main " + aiMove + " user" + userMoveTag + " " + tieFocus}
       onClick={() => handleClick()}
     >
       {outcome}

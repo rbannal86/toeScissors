@@ -75,12 +75,7 @@ export default function Board() {
           updatedBoard[currentTile].aiMove
         );
 
-        if (outcome === "tie")
-          tiedTiles.push({
-            tile: currentTile,
-            userMove: currentMove,
-            aiMove: updatedBoard[currentTile].aiMove,
-          });
+        if (outcome === "tie") tiedTiles.push(currentTile);
         else updatedBoard[currentTile].outcome = outcome;
       }
 
@@ -91,12 +86,7 @@ export default function Board() {
           aiMove.move
         );
 
-        if (outcome === "tie")
-          tiedTiles.push({
-            tile: currentTile,
-            userMove: board[aiMove.tile].userMove,
-            aiMove: aiMove.move,
-          });
+        if (outcome === "tie") tiedTiles.push(aiMove.tile);
         else updatedBoard[currentTile].outcome = outcome;
       }
 
@@ -104,12 +94,7 @@ export default function Board() {
       if (currentTile === aiMove.tile && !tiedTiles.includes(currentTile)) {
         let outcome = checkBoard.compareMoves(currentMove, aiMove.move);
 
-        if (outcome === "tie")
-          tiedTiles.push({
-            tile: currentTile,
-            userMove: currentMove,
-            aiMove: aiMove.move,
-          });
+        if (outcome === "tie") tiedTiles.push(currentTile);
         else updatedBoard[currentTile].outcome = outcome;
       }
 
@@ -135,16 +120,30 @@ export default function Board() {
           setBoard={setBoard}
           setCurrentTile={setCurrentTile}
           setCurrentMove={setCurrentMove}
+          tieList={tieList}
         />
       );
     });
   };
+
+  const updateBoardAfterTie = (tile, outcome) => {
+    let updatedBoard = board;
+    updatedBoard[tile].outcome = outcome;
+    setBoard(board);
+    setBoardUpdated(true);
+  };
+
   return (
     <div className={"board_main"}>
       <div className={"board_display"}>
         {renderBoard()}
         {tieToggle ? (
-          <HandleTie tieList={tieList} setTieList={setTieList} />
+          <HandleTie
+            tieList={tieList}
+            setTieList={setTieList}
+            setTieToggle={setTieToggle}
+            updateBoardAfterTie={updateBoardAfterTie}
+          />
         ) : (
           <Buttons currentTile={currentTile} handleMove={handleMove} />
         )}
