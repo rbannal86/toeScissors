@@ -2,4 +2,25 @@
   height: 100px;
   width: 100px;
   border: 2px solid black;
+  margin: -1px;
+}
+
+.usernone {
+  background-color: inherit;
+}
+
+.ai_move {
+  background-color: red;
+}
+
+.userrock {
+  background-color: royalblue;
+}
+
+.userpaper {
+  background-color: palegreen;
+}
+
+.userscissors {
+  background-color: slategray;
 }

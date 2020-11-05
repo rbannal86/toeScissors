@@ -6,7 +6,8 @@ export default function Tile(props) {
   const [userMove, setUserMove] = useState(props.tileState.userMove);
 
   useEffect(() => {
-    if (props.currentTile !== props.tileIndex && !userMove) setUserMove("none");
+    if (props.currentTile !== props.tileIndex && userMove !== "none")
+      setUserMove(props.tileState.userMove);
     if (props.currentTile === props.tileIndex && userMove === "none")
       setUserMove("rock");
   }, [props, userMove]);
@@ -35,6 +36,12 @@ export default function Tile(props) {
     }
   };
 
+  let aiMove;
+  if (props.tileState.aiMove !== "none") aiMove = "ai_move";
+
+  let outcome;
+  if (props.tileState.outcome) outcome = props.tileState.outcome;
+
   let handleClick = () => {};
 
   if (userMove === "none" || props.currentTile === props.tileIndex) {
@@ -47,8 +54,11 @@ export default function Tile(props) {
   }
 
   return (
-    <div className={"tile_main"} onClick={() => handleClick()}>
-      {userMove}
+    <div
+      className={"tile_main " + aiMove + " user" + userMove}
+      onClick={() => handleClick()}
+    >
+      {outcome}
     </div>
   );
 }
