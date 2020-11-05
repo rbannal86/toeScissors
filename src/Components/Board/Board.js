@@ -45,6 +45,8 @@ export default function Board() {
   const [tieToggle, setTieToggle] = useState(false);
   const [tieList, setTieList] = useState([]);
 
+  const [victory, setVictory] = useState(null);
+
   const [boardUpdated, setBoardUpdated] = useState(false);
 
   // useEffect(() => {
@@ -68,39 +70,41 @@ export default function Board() {
       updatedBoard[currentTile].userMove = currentMove;
       updatedBoard[aiMove.tile].aiMove = aiMove.move;
 
-      //check if player is contesting an ai tile
-      if (updatedBoard[currentTile].aiMove !== "none") {
-        let outcome = checkBoard.compareMoves(
-          moveSet.indexOf(currentMove),
-          updatedBoard[currentTile].aiMove
-        );
-
-        if (outcome === "tie") tiedTiles.push(currentTile);
-        else updatedBoard[currentTile].outcome = outcome;
-      }
-
-      //check if ai is contesting a player tile
-      if (updatedBoard[aiMove.tile].userMove !== "none") {
-        let outcome = checkBoard.compareMoves(
-          moveSet.indexOf(board[aiMove.tile].userMove),
-          aiMove.move
-        );
-
-        if (outcome === "tie") tiedTiles.push(aiMove.tile);
-        else updatedBoard[currentTile].outcome = outcome;
-      }
-
       //check if ai and player are contesting the same tile
       if (currentTile === aiMove.tile && !tiedTiles.includes(currentTile)) {
         let outcome = checkBoard.compareMoves(currentMove, aiMove.move);
 
         if (outcome === "tie") tiedTiles.push(currentTile);
         else updatedBoard[currentTile].outcome = outcome;
+      } else {
+        //check if player is contesting an ai tile
+        if (updatedBoard[currentTile].aiMove !== "none") {
+          let outcome = checkBoard.compareMoves(
+            moveSet.indexOf(currentMove),
+            updatedBoard[currentTile].aiMove
+          );
+
+          if (outcome === "tie") tiedTiles.push(currentTile);
+          else updatedBoard[currentTile].outcome = outcome;
+        }
+
+        //check if ai is contesting a player tile
+        if (updatedBoard[aiMove.tile].userMove !== "none") {
+          let outcome = checkBoard.compareMoves(
+            moveSet.indexOf(board[aiMove.tile].userMove),
+            aiMove.move
+          );
+
+          if (outcome === "tie") tiedTiles.push(aiMove.tile);
+          else updatedBoard[currentTile].outcome = outcome;
+        }
       }
 
       if (tiedTiles.length > 0) {
         setTieToggle(true);
       }
+      if (checkBoard.checkUserWin(updatedBoard, currentTile))
+        return setVictory("You Have Won!");
       setTieList(tiedTiles);
       setBoard(updatedBoard);
       setCurrentTile(" ");
@@ -129,12 +133,15 @@ export default function Board() {
   const updateBoardAfterTie = (tile, outcome) => {
     let updatedBoard = board;
     updatedBoard[tile].outcome = outcome;
+    if (checkBoard.checkUserWin(updatedBoard, tile))
+      return setVictory("You Have Won!");
     setBoard(board);
     setBoardUpdated(true);
   };
 
   return (
     <div className={"board_main"}>
+      <h2>{victory}</h2>
       <div className={"board_display"}>
         {renderBoard()}
         {tieToggle ? (
