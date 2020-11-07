@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Tile from "../Tile/Tile";
 import Buttons from "../Buttons/Buttons";
 import HandleTie from "../HandleTie/HandleTie";
@@ -37,8 +37,6 @@ export default function Board() {
     { userMove: "none", aiMove: "none", outcome: null },
   ]);
 
-  const moveSet = ["rock", "paper", "scissors"];
-
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
   const [currentAiMove, setCurrentAiMove] = useState();
@@ -63,60 +61,38 @@ export default function Board() {
       updatedBoard[aiMove.tile].aiMove = aiMove.move;
       setBoardUpdated(true);
       setBoard(updatedBoard);
-      // console.log(
-      //   checkBoard.checkDiagonalLeftToRight(board, 0, "aiMove", "ai wins")
-      // );
-      // console.log(
-      //   checkBoard.checkDiagonalLeftToRight(board, 4, "aiMove", "ai wins")
+
       if (
-        checkBoard.checkVertical(board, 0, "userMove", "ai wins") ||
-        checkBoard.checkHorizontal(board, 0, "userMove", "ai wins") ||
-        checkBoard.checkDiagonalLeftToRight(
-          board,
-          0,
-          "userMove",
-          "user wins"
-        ) ||
-        checkBoard.checkDiagonalRightToLeft(board, 0, "userMove", "user wins")
-      )
-        setVictory("The Computer Has Won!");
-      if (
-        checkBoard.checkVertical(board, 0, "aiMove", "user wins") ||
-        checkBoard.checkHorizontal(board, 0, "aiMove", "user wins") ||
-        checkBoard.checkDiagonalLeftToRight(board, 0, "aiMove", "ai wins") ||
-        checkBoard.checkDiagonalRightToLeft(board, 0, "aiMove", "ai wins")
+        checkBoard.checkVertical(board, 0, "aiMove", "ai wins") ||
+        checkBoard.checkHorizontal(board, 0, "aiMove", "ai wins") ||
+        checkBoard.checkDiagonalLeftToRight(board, "aiMove", "user wins") ||
+        checkBoard.checkDiagonalRightToLeft(board, "aiMove", "user wins")
       )
         setVictory("The Computer Has Won!");
     }
   };
 
-  useEffect(() => {
-    if (!tieToggle) {
-      if (
-        checkBoard.checkVertical(board, 0, "userMove", "ai wins") ||
-        checkBoard.checkHorizontal(board, 0, "userMove", "ai wins") ||
-        checkBoard.checkDiagonalLeftToRight(
-          board,
-          0,
-          "userMove",
-          "user wins"
-        ) ||
-        checkBoard.checkDiagonalRightToLeft(board, 0, "userMove", "user wins")
-      )
-        setVictory("You Win!");
-      if (
-        checkBoard.checkVertical(board, 0, "aiMove", "user wins") ||
-        checkBoard.checkHorizontal(board, 0, "aiMove", "user wins") ||
-        checkBoard.checkDiagonalLeftToRight(board, 0, "aiMove", "ai wins") ||
-        checkBoard.checkDiagonalRightToLeft(board, 0, "aiMove", "ai wins")
-      )
-        setVictory("The Computer Has Won!");
-    } else if (boardUpdated) {
-      setCurrentTile(" ");
-      setCurrentMove();
-      setCurrentAiMove();
-    }
-  }, [board, boardUpdated, currentAiMove, currentMove, currentTile, tieToggle]);
+  const checkUserWins = useCallback(() => {
+    if (
+      checkBoard.checkVertical(board, 0, "userMove", "ai wins") ||
+      checkBoard.checkHorizontal(board, 0, "userMove", "ai wins") ||
+      checkBoard.checkDiagonalLeftToRight(board, "userMove", "ai wins") ||
+      checkBoard.checkDiagonalRightToLeft(board, "userMove", "ai wins")
+    )
+      return true;
+    else return false;
+  }, [board]);
+
+  const checkAiWins = useCallback(() => {
+    if (
+      checkBoard.checkVertical(board, 0, "aiMove", "user wins") ||
+      checkBoard.checkHorizontal(board, 0, "aiMove", "user wins") ||
+      checkBoard.checkDiagonalLeftToRight(board, "aiMove", "user wins") ||
+      checkBoard.checkDiagonalRightToLeft(board, "aiMove", "user wins")
+    )
+      return true;
+    else return false;
+  }, [board]);
 
   useEffect(() => {
     if (boardUpdated) setBoardUpdated(false);
@@ -124,63 +100,31 @@ export default function Board() {
 
   const handleMove = () => {
     let aiMove = AI.aiMove();
-
     let updatedBoard = board;
     let tiedTiles = [];
+    updatedBoard[currentTile].userMove = currentMove;
     if (board[aiMove.tile].aiMove === "none") {
       setCurrentAiMove(aiMove.tile);
-      updatedBoard[currentTile].userMove = currentMove;
       updatedBoard[aiMove.tile].aiMove = aiMove.move;
+    } else return handleMove();
 
-      //check if ai and player are contesting the same tile
-      if (
-        currentTile === aiMove.tile &&
-        !tiedTiles.includes(currentTile) &&
-        !updatedBoard[currentTile].outcome
-      ) {
-        let outcome = checkBoard.compareMoves(currentMove, aiMove.move);
+    tiedTiles = checkBoard.checkForTies(updatedBoard);
+    tiedTiles = tiedTiles.filter((tile) => tile.outcome === "tie");
 
-        if (outcome === "tie") tiedTiles.push(currentTile);
-        else updatedBoard[currentTile].outcome = outcome;
-      } else {
-        //check if player is contesting an ai tile
-        if (
-          updatedBoard[currentTile].aiMove !== "none" &&
-          !updatedBoard[currentTile].outcome
-        ) {
-          let outcome = checkBoard.compareMoves(
-            moveSet.indexOf(currentMove),
-            updatedBoard[currentTile].aiMove
-          );
+    if (tiedTiles.length > 0) {
+      setTieToggle(true);
+      let newTiedTiles = [];
+      tiedTiles.forEach((tile) => {
+        newTiedTiles.push(tile.index);
+      });
+      setTieList(newTiedTiles);
+    }
+    setCurrentTile(" ");
+    setBoard(updatedBoard);
+    setBoardUpdated(true);
 
-          if (outcome === "tie") tiedTiles.push(currentTile);
-          else updatedBoard[currentTile].outcome = outcome;
-        }
-
-        //check if ai is contesting a player tile
-        if (
-          updatedBoard[aiMove.tile].userMove !== "none" &&
-          !updatedBoard[aiMove.tile].outcome
-        ) {
-          let outcome = checkBoard.compareMoves(
-            moveSet.indexOf(board[aiMove.tile].userMove),
-            aiMove.move
-          );
-
-          if (outcome === "tie") tiedTiles.push(aiMove.tile);
-          else updatedBoard[currentTile].outcome = outcome;
-        }
-      }
-
-      if (tiedTiles.length > 0) {
-        setTieList(tiedTiles);
-        return setTieToggle(true);
-      }
-
-      setBoard(updatedBoard);
-
-      setBoardUpdated(true);
-    } else handleMove();
+    if (checkUserWins()) setVictory("You Win!");
+    if (checkAiWins()) setVictory("The Computer Has Won!");
   };
 
   const renderBoard = () => {
@@ -203,10 +147,48 @@ export default function Board() {
   const updateBoardAfterTie = (tile, outcome) => {
     let updatedBoard = board;
     updatedBoard[tile].outcome = outcome;
-    // if (checkBoard.checkUserWin(updatedBoard, tile))
-    //   return setVictory("You Have Won!");
     setBoard(board);
     setBoardUpdated(true);
+    if (checkUserWins()) setVictory("You Win!");
+    if (checkAiWins()) setVictory("The Computer Has Won!");
+  };
+
+  const resetBoard = () => {
+    setBoard([
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+      { userMove: "none", aiMove: "none", outcome: null },
+    ]);
+
+    setCurrentTile(" ");
+    setCurrentMove();
+    setCurrentAiMove();
+    setTieToggle(false);
+    setTieList([]);
+    setVictory(null);
+    setBoardUpdated(false);
   };
 
   return (
@@ -221,7 +203,9 @@ export default function Board() {
       <h2>{victory}</h2>
       <div className={"board_display"}>
         {renderBoard()}
-        {tieToggle ? (
+        {victory ? (
+          <button onClick={() => resetBoard()}>New Game</button>
+        ) : tieToggle ? (
           <HandleTie
             tieList={tieList}
             setTieList={setTieList}
