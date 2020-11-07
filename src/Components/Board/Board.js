@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Tile from "../Tile/Tile";
 import Buttons from "../Buttons/Buttons";
 import HandleTie from "../HandleTie/HandleTie";
+import Scoreboard from "../Scoreboard/Scoreboard";
 
 import AI from "../../Services/AI";
 import checkBoard from "../../Services/checkBoard";
@@ -40,6 +41,9 @@ export default function Board() {
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
   const [currentAiMove, setCurrentAiMove] = useState();
+
+  const [userHeldTiles, setUserHeldTiles] = useState(0);
+  const [aiHeldTiles, setAiHeldTiles] = useState(0);
 
   const [tieToggle, setTieToggle] = useState(false);
   const [tieList, setTieList] = useState([]);
@@ -94,13 +98,30 @@ export default function Board() {
     else return false;
   }, [board]);
 
+  const countTotals = useCallback(() => {
+    let userOwned = board.filter((tile) => tile.outcome === "user wins").length;
+    let aiOwned = board.filter((tile) => tile.outcome === "ai wins").length;
+    if (board.filter((tile) => tile.outcome === null).length === 0 && !victory)
+      if (aiHeldTiles > userHeldTiles)
+        setVictory("The Computer Holds More Tiles. It Wins!");
+      else setVictory("You Hold More Tiles! You Win!");
+    setAiHeldTiles(aiOwned);
+    setUserHeldTiles(userOwned);
+    setBoardUpdated(false);
+  }, [aiHeldTiles, board, userHeldTiles, victory]);
+
+  // useEffect(() => {
+  //   if (boardUpdated) setBoardUpdated(false);
+  // }, [boardUpdated]);
+
   useEffect(() => {
-    if (boardUpdated) setBoardUpdated(false);
-  }, [boardUpdated]);
+    if (boardUpdated) countTotals();
+  }, [boardUpdated, countTotals]);
 
   const handleMove = () => {
     let aiMove = AI.aiMove();
     let updatedBoard = board;
+
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
     if (board[aiMove.tile].aiMove === "none") {
@@ -200,6 +221,7 @@ export default function Board() {
       >
         TEST AI
       </button>
+      <Scoreboard userTiles={userHeldTiles} aiTiles={aiHeldTiles} />
       <h2>{victory}</h2>
       <div className={"board_display"}>
         {renderBoard()}
