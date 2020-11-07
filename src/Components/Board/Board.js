@@ -10,7 +10,8 @@ import checkBoard from "../../Services/checkBoard";
 import "./Board.css";
 
 export default function Board() {
-  const [board, setBoard] = useState([
+  //Default board array for shorter setting on render and reset
+  const defaultBoard = [
     { userMove: "none", aiMove: "none", outcome: null },
     { userMove: "none", aiMove: "none", outcome: null },
     { userMove: "none", aiMove: "none", outcome: null },
@@ -36,7 +37,8 @@ export default function Board() {
     { userMove: "none", aiMove: "none", outcome: null },
     { userMove: "none", aiMove: "none", outcome: null },
     { userMove: "none", aiMove: "none", outcome: null },
-  ]);
+  ];
+  const [board, setBoard] = useState(defaultBoard);
 
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
@@ -51,30 +53,6 @@ export default function Board() {
   const [victory, setVictory] = useState(null);
 
   const [boardUpdated, setBoardUpdated] = useState(false);
-
-  const testAi = () => {
-    setBoardUpdated(false);
-    let aiMove = AI.aiMove();
-    let updatedBoard = board;
-    if (updatedBoard.filter((tile) => tile.aiMove === "none").length === 0)
-      return console.log("no more moves");
-    if (board[aiMove.tile].aiMove !== "none") {
-      console.log("reselecting");
-      testAi();
-    } else {
-      updatedBoard[aiMove.tile].aiMove = aiMove.move;
-      setBoardUpdated(true);
-      setBoard(updatedBoard);
-
-      if (
-        checkBoard.checkVertical(board, 0, "aiMove", "ai wins") ||
-        checkBoard.checkHorizontal(board, 0, "aiMove", "ai wins") ||
-        checkBoard.checkDiagonalLeftToRight(board, "aiMove", "user wins") ||
-        checkBoard.checkDiagonalRightToLeft(board, "aiMove", "user wins")
-      )
-        setVictory("The Computer Has Won!");
-    }
-  };
 
   const checkUserWins = useCallback(() => {
     if (
@@ -175,33 +153,7 @@ export default function Board() {
   };
 
   const resetBoard = () => {
-    setBoard([
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-      { userMove: "none", aiMove: "none", outcome: null },
-    ]);
+    setBoard(defaultBoard);
 
     setCurrentTile(" ");
     setCurrentMove();
@@ -214,13 +166,6 @@ export default function Board() {
 
   return (
     <div className={"board_main"}>
-      <button
-        onClick={() => {
-          testAi();
-        }}
-      >
-        TEST AI
-      </button>
       <Scoreboard userTiles={userHeldTiles} aiTiles={aiHeldTiles} />
       <h2>{victory}</h2>
       <div className={"board_display"}>
