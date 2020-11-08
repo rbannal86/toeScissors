@@ -241,7 +241,8 @@ const AI = {
     }
   },
 
-  aiMoveMedium(board, difficulty = "medium") {
+  aiMoveMedium(board, initialMove, difficulty = "medium") {
+    if (initialMove === " ") return this.aiMove();
     let tile = this.checkForBlocks(board);
     if (tile || tile?.toString() === "0") {
       return { tile: tile, move: Math.floor(Math.random() * 3) };

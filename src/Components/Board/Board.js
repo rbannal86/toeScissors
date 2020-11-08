@@ -3,6 +3,7 @@ import Tile from "../Tile/Tile";
 import Buttons from "../Buttons/Buttons";
 import HandleTie from "../HandleTie/HandleTie";
 import Scoreboard from "../Scoreboard/Scoreboard";
+import DifficultySelect from "../DifficultySelect/DifficultySelect";
 
 import AI from "../../Services/AI";
 import checkBoard from "../../Services/checkBoard";
@@ -43,6 +44,7 @@ export default function Board() {
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
   const [currentAiMove, setCurrentAiMove] = useState(" ");
+  const [aiDifficulty, setAiDifficulty] = useState("medium");
 
   const [userHeldTiles, setUserHeldTiles] = useState(0);
   const [aiHeldTiles, setAiHeldTiles] = useState(0);
@@ -98,7 +100,13 @@ export default function Board() {
 
   const handleMove = () => {
     let updatedBoard = board;
-    let aiMove = AI.aiMoveHard(updatedBoard, currentAiMove);
+    console.log(aiDifficulty);
+    let aiMove;
+    if (aiDifficulty === "easy") aiMove = AI.aiMove();
+    else if (aiDifficulty === "medium")
+      aiMove = AI.aiMoveMedium(board, currentAiMove);
+    else if (aiDifficulty === "hard")
+      aiMove = AI.aiMoveHard(board, currentAiMove);
 
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
@@ -169,6 +177,10 @@ export default function Board() {
 
   return (
     <div className={"board_main"}>
+      <DifficultySelect
+        setAiDifficulty={setAiDifficulty}
+        aiDifficulty={aiDifficulty}
+      />
       <Scoreboard userTiles={userHeldTiles} aiTiles={aiHeldTiles} />
       <h2>{victory}</h2>
       <div className={"board_display"}>
