@@ -97,11 +97,12 @@ export default function Board() {
   }, [boardUpdated, countTotals]);
 
   const handleMove = () => {
-    let aiMove = AI.aiMove();
     let updatedBoard = board;
+    let aiMove = AI.aiMoveMedium(updatedBoard);
 
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
+
     if (board[aiMove.tile].aiMove === "none") {
       setCurrentAiMove(aiMove.tile);
       updatedBoard[aiMove.tile].aiMove = aiMove.move;
@@ -162,6 +163,8 @@ export default function Board() {
     setTieList([]);
     setVictory(null);
     setBoardUpdated(false);
+    setUserHeldTiles(0);
+    setAiHeldTiles(0);
   };
 
   return (
