@@ -42,7 +42,7 @@ export default function Board() {
 
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
-  const [currentAiMove, setCurrentAiMove] = useState();
+  const [currentAiMove, setCurrentAiMove] = useState(" ");
 
   const [userHeldTiles, setUserHeldTiles] = useState(0);
   const [aiHeldTiles, setAiHeldTiles] = useState(0);
@@ -98,7 +98,7 @@ export default function Board() {
 
   const handleMove = () => {
     let updatedBoard = board;
-    let aiMove = AI.aiMoveMedium(updatedBoard);
+    let aiMove = AI.aiMoveHard(updatedBoard, currentAiMove);
 
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
@@ -158,7 +158,7 @@ export default function Board() {
 
     setCurrentTile(" ");
     setCurrentMove();
-    setCurrentAiMove();
+    setCurrentAiMove(" ");
     setTieToggle(false);
     setTieList([]);
     setVictory(null);

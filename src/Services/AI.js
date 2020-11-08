@@ -13,14 +13,12 @@ const AI = {
     let emptyIndex = [];
     let aiBlocks = false;
     rowArray.forEach((tile, index) => {
-      if (board[tile] === undefined) console.log("undefined", tile);
       if (board[tile]?.outcome === "ai wins") aiBlocks = true;
       else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
         emptyIndex.push(tile);
       else if (board[tile].outcome === "user wins") emptyIndex.push(null);
       nextArray[index] = tile + 5;
     });
-    console.log(aiBlocks);
     if (aiBlocks === true) {
       if (Math.max(nextArray) >= 25) return false;
       else return this.checkColumns(board, nextArray);
@@ -28,7 +26,6 @@ const AI = {
       emptyIndex = emptyIndex.filter(
         (item) => item || item?.toString() === "0"
       );
-      console.log(emptyIndex);
       let index = Math.floor(Math.random() * emptyIndex.length);
       return emptyIndex[index];
     } else if (Math.max(nextArray) < 25) {
@@ -41,7 +38,6 @@ const AI = {
     let emptyIndex = [];
     let aiBlocks = false;
     columnArray.forEach((tile, index) => {
-      if (board[tile] === undefined) console.log("undefined", tile);
       if (board[tile]?.outcome === "ai wins") aiBlocks = true;
       else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
         emptyIndex.push(tile);
@@ -59,7 +55,6 @@ const AI = {
       emptyIndex = emptyIndex.filter(
         (item) => item || item?.toString() === "0"
       );
-      console.log(emptyIndex);
       let index = Math.floor(Math.random() * emptyIndex.length);
       return emptyIndex[index];
     } else if (Math.max(nextArray) < 25)
@@ -72,7 +67,6 @@ const AI = {
     let emptyIndex = [];
     let aiBlocks = false;
     diagonalArray.forEach((tile) => {
-      if (board[tile] === undefined) console.log("undefined", tile);
       if (board[tile].outcome === "ai wins") aiBlocks = true;
       else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
         emptyIndex.push(tile);
@@ -89,7 +83,6 @@ const AI = {
       emptyIndex = emptyIndex.filter(
         (item) => item || item?.toString() === "0"
       );
-      console.log(emptyIndex);
       let index = Math.floor(Math.random() * emptyIndex.length);
 
       return emptyIndex[index];
@@ -128,7 +121,6 @@ const AI = {
         !aiBlocks &&
         availableMoves.length > 0
       ) {
-        console.log("ROW");
         let index = Math.floor(Math.random() * availableMoves.length);
         return availableMoves[index];
       }
@@ -166,7 +158,6 @@ const AI = {
         !aiBlocks &&
         availableMoves.length > 0
       ) {
-        console.log("COLUMN");
         let index = Math.floor(Math.random() * availableMoves.length);
         return availableMoves[index];
       }
@@ -207,7 +198,6 @@ const AI = {
         !aiBlocks &&
         availableMoves.length > 0
       ) {
-        console.log("L2R Diag");
         let index = Math.floor(Math.random() * availableMoves.length);
         return availableMoves[index];
       }
@@ -246,19 +236,164 @@ const AI = {
       !aiBlocks &&
       availableMoves.length > 0
     ) {
-      console.log("R2L Diag");
       let index = Math.floor(Math.random() * availableMoves.length);
       return availableMoves[index];
     }
   },
 
-  aiMoveMedium(board) {
+  aiMoveMedium(board, difficulty = "medium") {
     let tile = this.checkForBlocks(board);
-    console.log(tile);
     if (tile || tile?.toString() === "0") {
-      console.log("AI IS BLOCKING!");
       return { tile: tile, move: Math.floor(Math.random() * 3) };
+    } else if (difficulty === "hard") {
+      return null;
     } else return this.aiMove();
+  },
+
+  aiHardScanRows(board, rowArray = [0, 1, 2, 3, 4], resultsArray = []) {
+    let newMoveArray = [...rowArray];
+    let newRowArray = [];
+    let score = 0;
+    let userBlock = false;
+    let resultsObject = { score, newMoveArray, userBlock };
+    let newResultsArray = [...resultsArray];
+
+    rowArray.forEach((tile, index) => {
+      if (board[tile].outcome === "user wins") {
+        newMoveArray = [];
+        score = 0;
+        userBlock = true;
+      } else if (
+        board[tile].outcome === "ai wins" ||
+        board[tile].aiMove !== "none"
+      ) {
+        newMoveArray = newMoveArray.filter((move) => move !== tile);
+        score = score + 1;
+      } else if (board[tile].userMove !== "none") {
+        score = score - 0.5;
+      }
+
+      newRowArray[index] = tile + 5;
+    });
+    resultsObject.score = score;
+    resultsObject.newMoveArray = newMoveArray;
+    resultsObject.userBlock = userBlock;
+    newResultsArray.push(resultsObject);
+    if (newRowArray[4] >= 25) {
+      newResultsArray.sort((a, b) => (a.score > b.score ? 1 : -1));
+      return newResultsArray;
+    } else return this.aiHardScanRows(board, newRowArray, newResultsArray);
+  },
+
+  aiHardScanColumns(
+    board,
+    columnArray = [0, 5, 10, 15, 20],
+    resultsArray = []
+  ) {
+    let newMoveArray = [...columnArray];
+    let newColumnArray = [...columnArray];
+    let score = 0;
+    let userBlock = false;
+    let resultsObject = { score, newMoveArray, userBlock };
+    let newResultsArray = [...resultsArray];
+
+    columnArray.forEach((tile, index) => {
+      if (board[tile].outcome === "user wins") {
+        newMoveArray = [];
+        score = 0;
+        userBlock = true;
+      } else if (
+        board[tile].outcome === "ai wins" ||
+        board[tile].aiMove !== "none"
+      ) {
+        newMoveArray = newMoveArray.filter((move) => move !== tile);
+        score = score + 1;
+      } else if (board[tile].userMove !== "none") {
+        score = score - 0.5;
+      }
+
+      newColumnArray[index] = newColumnArray[index] + 1;
+    });
+
+    resultsObject.score = score;
+    resultsObject.newMoveArray = newMoveArray;
+    resultsObject.userBlock = userBlock;
+    newResultsArray.push(resultsObject);
+    if (newColumnArray[4] === 25) {
+      newResultsArray.sort((a, b) => (a.score > b.score ? 1 : -1));
+      return newResultsArray;
+    } else
+      return this.aiHardScanColumns(board, newColumnArray, newResultsArray);
+  },
+
+  aiHardScanDiagonal(board, diagonalArray) {
+    let moveArray = [...diagonalArray];
+    let score = 0;
+    let userBlock = false;
+    let resultsObject = { score, userBlock };
+
+    diagonalArray.forEach((tile) => {
+      if (board[tile].outcome === "user wins") {
+        moveArray = [];
+        score = 0;
+        userBlock = true;
+      } else if (
+        board[tile].outcome === "ai wins" ||
+        board[tile].aiMove !== "none"
+      ) {
+        moveArray = moveArray.filter((move) => move !== tile);
+        score = score + 1;
+      } else if (board[tile].userMove !== "none") {
+        score = score - 0.5;
+      }
+    });
+
+    resultsObject.score = score;
+    resultsObject.newMoveArray = moveArray;
+    resultsObject.userBlock = userBlock;
+    return resultsObject;
+  },
+
+  aiHardChooseMove(board) {
+    let possibleMoves = [];
+    possibleMoves.push(this.aiHardScanRows(board)[4]);
+    possibleMoves.push(this.aiHardScanColumns(board)[4]);
+    possibleMoves.push(this.aiHardScanDiagonal(board, [0, 6, 12, 18, 24]));
+    possibleMoves.push(this.aiHardScanDiagonal(board, [4, 8, 12, 16, 20]));
+    possibleMoves = possibleMoves.filter((tile) => !tile.userBlock);
+    possibleMoves = possibleMoves.sort((a, b) => (a.score > b.score ? 1 : -1));
+    let newMoveSet = possibleMoves.pop().newMoveArray;
+    if (newMoveSet.length > 0)
+      return {
+        tile: newMoveSet[Math.floor(Math.random() * newMoveSet.length)],
+        move: Math.floor(Math.random() * 3),
+      };
+    else return null;
+  },
+
+  //begin moving in a randomly selected direction
+  //Check for a potential block first
+  //if a player blocks, caluclate risk -- if the streak is 3 long with a block
+  //on tile 4, calculate a score of 2.5 (1pt per tile, -.5 for block) > a new direction has a score of 2.
+  //This means, if the ai has made a chain of three, they will contest the 4th,
+  //but change directions on two or less blocks.
+  //If a direction runs into a user-owned tile, abandons that direction.
+  //If all directions are blocked by a user-owned tile, start randomizing.
+  aiMoveHard(board, lastMove) {
+    //randomly start off in a corner
+    let move = Math.floor(Math.random() * 3);
+
+    if (lastMove === " ") {
+      let cornerMoves = [0, 4, 20, 24];
+      let cornerIndex = Math.floor(Math.random() * 4);
+      return { tile: cornerMoves[cornerIndex], move: move };
+    }
+    if (lastMove !== " ") {
+      let move = this.aiMoveMedium(board, "hard");
+      if (!move) move = this.aiHardChooseMove(board);
+      if (move) return move;
+      else return this.aiMove();
+    }
   },
 
   aiTie: () => {
