@@ -81,14 +81,18 @@ export default function Board() {
   const countTotals = useCallback(() => {
     let userOwned = board.filter((tile) => tile.outcome === "user wins").length;
     let aiOwned = board.filter((tile) => tile.outcome === "ai wins").length;
-    if (board.filter((tile) => tile.outcome === null).length === 0 && !victory)
+    if (
+      board.filter((tile) => tile.outcome === null).length === 0 &&
+      !victory &&
+      !tieToggle
+    )
       if (aiHeldTiles > userHeldTiles)
         setVictory("The Computer Holds More Tiles. It Wins!");
       else setVictory("You Hold More Tiles! You Win!");
     setAiHeldTiles(aiOwned);
     setUserHeldTiles(userOwned);
     setBoardUpdated(false);
-  }, [aiHeldTiles, board, userHeldTiles, victory]);
+  }, [aiHeldTiles, board, tieToggle, userHeldTiles, victory]);
 
   // useEffect(() => {
   //   if (boardUpdated) setBoardUpdated(false);
@@ -100,13 +104,10 @@ export default function Board() {
 
   const handleMove = () => {
     let updatedBoard = board;
-    console.log(aiDifficulty);
     let aiMove;
     if (aiDifficulty === "easy") aiMove = AI.aiMove();
-    else if (aiDifficulty === "medium")
-      aiMove = AI.aiMoveMedium(board, currentAiMove);
-    else if (aiDifficulty === "hard")
-      aiMove = AI.aiMoveHard(board, currentAiMove);
+    if (aiDifficulty === "medium") aiMove = AI.aiMoveMedium(board);
+    if (aiDifficulty === "hard") aiMove = AI.aiMoveHard(board, currentAiMove);
 
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;

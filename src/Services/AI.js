@@ -1,7 +1,7 @@
 const AI = {
   //random movement
   aiMove() {
-    console.log("random ai movement");
+    console.log("random move");
     return {
       tile: Math.floor(Math.random() * 25),
       move: Math.floor(Math.random() * 3),
@@ -241,10 +241,10 @@ const AI = {
     }
   },
 
-  aiMoveMedium(board, initialMove, difficulty = "medium") {
-    if (initialMove === " ") return this.aiMove();
+  aiMoveMedium(board, difficulty = "medium") {
     let tile = this.checkForBlocks(board);
-    if (tile || tile?.toString() === "0") {
+    if ((tile || tile?.toString() === "0") && board[tile].aiMove === "none") {
+      console.log("medium move finished");
       return { tile: tile, move: Math.floor(Math.random() * 3) };
     } else if (difficulty === "hard") {
       return null;
@@ -363,8 +363,9 @@ const AI = {
     possibleMoves.push(this.aiHardScanDiagonal(board, [4, 8, 12, 16, 20]));
     possibleMoves = possibleMoves.filter((tile) => !tile.userBlock);
     possibleMoves = possibleMoves.sort((a, b) => (a.score > b.score ? 1 : -1));
-    let newMoveSet = possibleMoves.pop().newMoveArray;
-    if (newMoveSet.length > 0)
+    let newMoveSet = possibleMoves.pop()?.newMoveArray;
+    console.log(newMoveSet);
+    if (newMoveSet?.length > 0)
       return {
         tile: newMoveSet[Math.floor(Math.random() * newMoveSet.length)],
         move: Math.floor(Math.random() * 3),
@@ -382,17 +383,18 @@ const AI = {
   //If all directions are blocked by a user-owned tile, start randomizing.
   aiMoveHard(board, lastMove) {
     //randomly start off in a corner
-    let move = Math.floor(Math.random() * 3);
-
     if (lastMove === " ") {
       let cornerMoves = [0, 4, 20, 24];
       let cornerIndex = Math.floor(Math.random() * 4);
-      return { tile: cornerMoves[cornerIndex], move: move };
+      return {
+        tile: cornerMoves[cornerIndex],
+        move: Math.floor(Math.random() * 3),
+      };
     }
     if (lastMove !== " ") {
       let move = this.aiMoveMedium(board, "hard");
       if (!move) move = this.aiHardChooseMove(board);
-      if (move) return move;
+      if (move && board[move.tile]?.aiMove === "none") return move;
       else return this.aiMove();
     }
   },
