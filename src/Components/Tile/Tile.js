@@ -7,6 +7,13 @@ const Tile = React.memo((props) => {
   const [userMove, setUserMove] = useState(props.tileState.userMove);
 
   useEffect(() => {
+    if (props.currentTile !== props.tileIndex && userMove !== "none")
+      setUserMove(props.tileState.userMove);
+    if (props.currentTile === props.tileIndex && userMove === "none")
+      setUserMove("rock");
+  }, [props, userMove]);
+
+  useEffect(() => {
     if (document.getElementById("tile_image_user_move")) {
       console.log("remove class");
       document.getElementById("tile_image_user_move").removeAttribute("class");
