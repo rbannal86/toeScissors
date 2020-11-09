@@ -1,8 +1,8 @@
 .tile_main {
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
   border: 2px solid black;
-  margin: -0.5px;
+  margin: -1px;
 }
 
 .usernone {
@@ -13,18 +13,35 @@
   background-color: red;
 }
 
-.userrock {
-  background-color: royalblue;
+.currentTie {
+  background-color: yellow;
+}
+
+.tile_image {
+  width: inherit;
+  height: inherit;
+  animation: fadeIn ease 0.5s;
+}
+
+.rock,
+.paper,
+.scissors > .tile_image {
+  animation: none;
 }
 
 .userpaper {
-  background-color: palegreen;
+  animation: none;
 }
 
 .userscissors {
-  background-color: slategray;
+  animation: none;
 }
 
-.currentTie {
-  background-color: yellow;
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
 }

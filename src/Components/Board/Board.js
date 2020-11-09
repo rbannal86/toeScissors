@@ -103,7 +103,7 @@ export default function Board() {
   }, [boardUpdated, countTotals]);
 
   const handleMove = () => {
-    let updatedBoard = board;
+    let updatedBoard = [...board];
     let aiMove;
     if (aiDifficulty === "easy") aiMove = AI.aiMove();
     if (aiDifficulty === "medium") aiMove = AI.aiMoveMedium(board);
@@ -130,7 +130,7 @@ export default function Board() {
     }
     setCurrentTile(" ");
     setBoard(updatedBoard);
-    setBoardUpdated(true);
+    // setBoardUpdated(true);
 
     if (checkUserWins()) setVictory("You Win!");
     if (checkAiWins()) setVictory("The Computer Has Won!");
@@ -140,7 +140,7 @@ export default function Board() {
     return board.map((tile, index) => {
       return (
         <Tile
-          key={tile.userMove + index}
+          key={index}
           tileState={tile}
           tileIndex={index}
           currentTile={currentTile}
@@ -148,13 +148,15 @@ export default function Board() {
           setCurrentTile={setCurrentTile}
           setCurrentMove={setCurrentMove}
           tieList={tieList}
+          board={board}
+          boardUpdated={boardUpdated}
         />
       );
     });
   };
 
   const updateBoardAfterTie = (tile, outcome) => {
-    let updatedBoard = board;
+    let updatedBoard = [...board];
     updatedBoard[tile].outcome = outcome;
     setBoard(board);
     setBoardUpdated(true);
@@ -184,21 +186,19 @@ export default function Board() {
       />
       <Scoreboard userTiles={userHeldTiles} aiTiles={aiHeldTiles} />
       <h2>{victory}</h2>
-      <div className={"board_display"}>
-        {renderBoard()}
-        {victory ? (
-          <button onClick={() => resetBoard()}>New Game</button>
-        ) : tieToggle ? (
-          <HandleTie
-            tieList={tieList}
-            setTieList={setTieList}
-            setTieToggle={setTieToggle}
-            updateBoardAfterTie={updateBoardAfterTie}
-          />
-        ) : (
-          <Buttons currentTile={currentTile} handleMove={handleMove} />
-        )}
-      </div>
+      <div className={"board_display"}>{renderBoard()}</div>
+      {victory ? (
+        <button onClick={() => resetBoard()}>New Game</button>
+      ) : tieToggle ? (
+        <HandleTie
+          tieList={tieList}
+          setTieList={setTieList}
+          setTieToggle={setTieToggle}
+          updateBoardAfterTie={updateBoardAfterTie}
+        />
+      ) : (
+        <Buttons currentTile={currentTile} handleMove={handleMove} />
+      )}
     </div>
   );
 }

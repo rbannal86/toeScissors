@@ -1,0 +1,4 @@
+.difficulty_select_button:disabled {
+  color: teal;
+  border: 2px teal solid;
+}
