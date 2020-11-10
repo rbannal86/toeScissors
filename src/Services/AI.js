@@ -244,7 +244,6 @@ const AI = {
   aiMoveMedium(board, difficulty = "medium") {
     let tile = this.checkForBlocks(board);
     if ((tile || tile?.toString() === "0") && board[tile].aiMove === "none") {
-      console.log("medium move finished");
       return { tile: tile, move: Math.floor(Math.random() * 3) };
     } else if (difficulty === "hard") {
       return null;
@@ -364,7 +363,6 @@ const AI = {
     possibleMoves = possibleMoves.filter((tile) => !tile.userBlock);
     possibleMoves = possibleMoves.sort((a, b) => (a.score > b.score ? 1 : -1));
     let newMoveSet = possibleMoves.pop()?.newMoveArray;
-    console.log(newMoveSet);
     if (newMoveSet?.length > 0)
       return {
         tile: newMoveSet[Math.floor(Math.random() * newMoveSet.length)],

@@ -102,12 +102,20 @@ export default function Board() {
     if (boardUpdated) countTotals();
   }, [boardUpdated, countTotals]);
 
+  const checkWins = () => {
+    if (checkUserWins()) setVictory("You Win!");
+    if (checkAiWins()) setVictory("The Computer Has Won!");
+  };
+
   const handleMove = () => {
     let updatedBoard = [...board];
     let aiMove;
     if (aiDifficulty === "easy") aiMove = AI.aiMove();
     if (aiDifficulty === "medium") aiMove = AI.aiMoveMedium(board);
     if (aiDifficulty === "hard") aiMove = AI.aiMoveHard(board, currentAiMove);
+
+    console.log("ai move", aiMove.tile);
+    console.log("user move", currentTile);
 
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
@@ -132,8 +140,7 @@ export default function Board() {
     setBoard(updatedBoard);
     setBoardUpdated(true);
     // countTotals();
-    if (checkUserWins()) setVictory("You Win!");
-    if (checkAiWins()) setVictory("The Computer Has Won!");
+    checkWins();
   };
 
   const renderBoard = () => {
