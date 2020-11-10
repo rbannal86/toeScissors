@@ -61,3 +61,23 @@
   padding-left: 10%;
   padding-top: 5%;
 }
+
+@media only screen and (min-width: 750px) {
+  .tile_main {
+    width: 75px;
+    height: 75px;
+    font-size: 1.8rem;
+  }
+
+  .tile_text {
+    padding-left: 5%;
+    padding-top: 2.5%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .tile_main {
+    width: 100px;
+    height: 100px;
+  }
+}

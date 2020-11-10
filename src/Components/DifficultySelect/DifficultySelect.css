@@ -1,6 +1,5 @@
 .difficulty_select_main {
   border: 4px solid #f8f8f8;
-  border-radius: 3%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -32,4 +31,29 @@
 .difficulty_select_button:disabled {
   background-color: #f8b800;
   border: 2px solid #881400;
+}
+
+@media only screen and (min-width: 750px) {
+  .difficulty_select_main {
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+
+  .difficulty_select_button {
+    padding: 2%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .difficulty_select_main {
+    margin-bottom: 1%;
+  }
+
+  .difficulty_select_button {
+    width: 25%;
+    font-size: 1.3rem;
+    padding: 0;
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
 }

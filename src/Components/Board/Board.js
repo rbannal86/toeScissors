@@ -201,15 +201,17 @@ export default function Board() {
           <h2 className={"board_victory"}>{victory}</h2>
         </div>
       ) : null}
-      <div className={"board_display"}>{renderBoard()}</div>
-      <div className={"board_buttons"}>
-        <Buttons
-          setVictory={setVictory}
-          currentTile={currentTile}
-          handleMove={handleMove}
-          resetBoard={resetBoard}
-          victory={victory}
-        />
+      <div className={"board_input"}>
+        <div className={"board_display"}>{renderBoard()}</div>
+        <div className={"board_buttons"}>
+          <Buttons
+            setVictory={setVictory}
+            currentTile={currentTile}
+            handleMove={handleMove}
+            resetBoard={resetBoard}
+            victory={victory}
+          />
+        </div>
       </div>
     </div>
   );

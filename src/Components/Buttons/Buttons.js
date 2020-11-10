@@ -6,7 +6,7 @@ export default function Buttons(props) {
   return (
     <div className={"buttons_main"}>
       {toggleForfeit ? (
-        <>
+        <div className={"buttons_section"}>
           <h3 className={"buttons_confirm"}>
             Are you sure you want to forfeit?
           </h3>
@@ -25,33 +25,37 @@ export default function Buttons(props) {
           >
             Cancel
           </button>
-        </>
+        </div>
       ) : (
         <>
           {props.victory ? (
-            <button
-              onClick={() => props.resetBoard()}
-              className={"buttons_button"}
-            >
-              New Game
-            </button>
+            <div className={"buttons_section"}>
+              <button
+                onClick={() => props.resetBoard()}
+                className={"buttons_button buttons_new_game"}
+              >
+                New Game
+              </button>
+            </div>
           ) : (
             <>
-              <button
-                disabled={props.currentTile === " "}
-                onClick={() => props.handleMove()}
-                className={"buttons_button"}
-              >
-                Confirm Move
-              </button>
-              <button
-                className={"buttons_button"}
-                onClick={() => {
-                  setToggleForfeit(true);
-                }}
-              >
-                Forfeit
-              </button>
+              <div className={"buttons_section"}>
+                <button
+                  disabled={props.currentTile === " "}
+                  onClick={() => props.handleMove()}
+                  className={"buttons_button"}
+                >
+                  Confirm Move
+                </button>
+                <button
+                  className={"buttons_button"}
+                  onClick={() => {
+                    setToggleForfeit(true);
+                  }}
+                >
+                  Forfeit
+                </button>
+              </div>
             </>
           )}
         </>
