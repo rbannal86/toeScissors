@@ -25,6 +25,11 @@
   border-radius: 3%;
   font-family: "Press Start 2P", cursive;
   font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .handle_tie_confirm {
@@ -32,6 +37,8 @@
 }
 
 .handle_tie_image {
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  justify-self: center;
 }

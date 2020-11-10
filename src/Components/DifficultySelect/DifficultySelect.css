@@ -22,6 +22,11 @@
   font-family: "Press Start 2P", cursive;
   background-color: inherit;
   text-shadow: 2px 2px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-self: center;
+  align-items: center;
 }
 
 .difficulty_select_button:disabled {

@@ -150,6 +150,7 @@ export default function Board() {
           tieList={tieList}
           board={board}
           boardUpdated={boardUpdated}
+          victory={victory}
         />
       );
     });
@@ -202,13 +203,13 @@ export default function Board() {
       ) : null}
       <div className={"board_display"}>{renderBoard()}</div>
       <div className={"board_buttons"}>
-        {victory ? (
-          <button onClick={() => resetBoard()} className={"board_button"}>
-            New Game
-          </button>
-        ) : (
-          <Buttons currentTile={currentTile} handleMove={handleMove} />
-        )}
+        <Buttons
+          setVictory={setVictory}
+          currentTile={currentTile}
+          handleMove={handleMove}
+          resetBoard={resetBoard}
+          victory={victory}
+        />
       </div>
     </div>
   );

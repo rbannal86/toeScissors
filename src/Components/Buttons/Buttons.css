@@ -1,0 +1,26 @@
+.buttons_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 80%;
+}
+
+.buttons_button {
+  margin-bottom: 2%;
+  background-color: #f8b800;
+  border: 3px solid black;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.8rem;
+  width: 100%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.buttons_confirm {
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.5rem;
+  color: #fcfcfc;
+  text-shadow: 2px 2px black;
+}

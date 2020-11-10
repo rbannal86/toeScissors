@@ -1,10 +1,11 @@
-import { render } from "@testing-library/react";
 import React, { useState, useEffect } from "react";
 
 import "./Tile.css";
 
 const Tile = React.memo((props) => {
   const [userMove, setUserMove] = useState(props.tileState.userMove);
+  const [activeTile, setActiveTile] = useState();
+  const [ownerTile, setOwnerTile] = useState();
 
   useEffect(() => {
     if (props.currentTile !== props.tileIndex && userMove !== "none")
@@ -14,14 +15,44 @@ const Tile = React.memo((props) => {
   }, [props, userMove]);
 
   useEffect(() => {
-    if (document.getElementById("tile_image_user_move")) {
-      console.log("remove class");
-      document.getElementById("tile_image_user_move").removeAttribute("class");
-      document
-        .getElementById("tile_image_user_move")
-        .setAttribute("class", "tile_image");
+    if (props.currentTile === props.tileIndex && !activeTile)
+      setActiveTile("active_tile");
+    else if (props.currentTile !== props.tileIndex && activeTile) {
+      setActiveTile(null);
     }
-  }, [userMove]);
+  }, [activeTile, props.currentTile, props.tileIndex]);
+
+  useEffect(() => {
+    if (userMove === "none" && props.tileState.aiMove === "none")
+      setOwnerTile("open_tile");
+    if (props.tileState.outcome === "user wins")
+      setOwnerTile("user_tile_owned");
+    if (
+      userMove !== "none" &&
+      props.tileState.aiMove === "none" &&
+      !props.tileState.outcome
+    )
+      setOwnerTile("user_tile_move");
+    if (userMove === "none" && props.tileState.aiMove !== "none")
+      setOwnerTile("ai_tile_move");
+    if (props.tileState.outcome === "ai wins") setOwnerTile("ai_tile_owned");
+    if (
+      userMove !== "none" &&
+      props.tileState.aiMove !== "none" &&
+      !props.tileState.outcome
+    )
+      setOwnerTile("contested_tile");
+  }, [props.tileState.aiMove, props.tileState.outcome, userMove]);
+
+  // useEffect(() => {
+  //   if (document.getElementById("tile_image_user_move")) {
+  //     console.log("remove class");
+  //     document.getElementById("tile_image_user_move").removeAttribute("class");
+  //     document
+  //       .getElementById("tile_image_user_move")
+  //       .setAttribute("class", "tile_image");
+  //   }
+  // }, [userMove]);
 
   const changeMove = () => {
     switch (userMove) {
@@ -48,7 +79,7 @@ const Tile = React.memo((props) => {
   };
 
   const renderImage = () => {
-    if (userMove !== "none" && !outcome)
+    if (userMove !== "none" && !props.tileState.outcome)
       return (
         <img
           id={"tile_image_user_move"}
@@ -58,16 +89,6 @@ const Tile = React.memo((props) => {
         />
       );
   };
-
-  let aiMove;
-  if (props.tileState.aiMove !== "none" && !props.tileState.outcome)
-    aiMove = "ai_move";
-
-  let userMoveTag;
-  if (userMove !== "none" && !props.tileState.outcome) userMoveTag = userMove;
-
-  let outcome;
-  if (props.tileState.outcome) outcome = props.tileState.outcome;
 
   let tieFocus;
   if (props.tieList.length > 0 && props.tieList[0] === props.tileIndex)
@@ -97,23 +118,23 @@ const Tile = React.memo((props) => {
 
   return (
     <button
-      className={
-        "tile_main " +
-        aiMove +
-        " user " +
-        props.tileState.userMove +
-        " " +
-        tieFocus
-      }
+      className={"tile_main " + tieFocus + " " + activeTile + " " + ownerTile}
       onClick={() => handleClick()}
+      disabled={props.victory ? true : false}
     >
       {renderImage()}
       {props.tileState.aiMove !== "none" && userMove === "none" ? (
-        <h3 className={"tile_image"}>?</h3>
+        <h3 className={"tile_image tile_text"}>?</h3>
       ) : null}
-      {outcome === "ai wins" ? <h3 className={"tile_image"}>X</h3> : null}
-      {outcome === "user wins" ? <h3 className={"tile_image"}>O</h3> : null}
-      {outcome === "tie" ? <h3 className={"tile_image"}>!</h3> : null}
+      {props.tileState.outcome === "ai wins" ? (
+        <h3 className={"tile_image tile_text"}>X</h3>
+      ) : null}
+      {props.tileState.outcome === "user wins" ? (
+        <h3 className={"tile_image tile_text"}>O</h3>
+      ) : null}
+      {props.tileState.outcome === "tie" ? (
+        <h3 className={"tile_image tile_text"}>!</h3>
+      ) : null}
     </button>
   );
 });

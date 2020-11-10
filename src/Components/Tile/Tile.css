@@ -2,46 +2,62 @@
   height: 50px;
   width: 50px;
   border: 2px solid black;
-  margin: -1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  outline: none;
+  font-size: 1.3rem;
+  text-align: center;
 }
 
-.usernone {
-  background-color: inherit;
+.open_tile {
+  background-color: #fcfcfc;
 }
 
-.ai_move {
-  background-color: red;
+.user_tile_move {
+  background-color: #6844fc;
+}
+
+.user_tile_owned {
+  background-color: #4428bc;
+  color: #fcfcfc;
+  text-shadow: 1px 1px black;
+}
+
+.ai_tile_move {
+  background-color: #e40058;
+  color: #fcfcfc;
+  text-shadow: 1px 1px black;
+}
+
+.ai_tile_owned {
+  background-color: #a80020;
+  color: #fcfcfc;
+  text-shadow: 1px 1px black;
+}
+
+.contested_tile {
+  background-color: #f8b800;
+  text-shadow: 1px 1px white;
+}
+
+.active_tile {
+  border: 2px solid #00fcfc;
 }
 
 .currentTie {
-  background-color: yellow;
+  background-color: #f8b800;
+  border: 2px solid #00fcfc;
 }
 
 .tile_image {
   width: inherit;
   height: inherit;
-  animation: fadeIn ease 0.5s;
 }
 
-.rock,
-.paper,
-.scissors > .tile_image {
-  animation: none;
-}
-
-.userpaper {
-  animation: none;
-}
-
-.userscissors {
-  animation: none;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0%;
-  }
-  100% {
-    opacity: 100%;
-  }
+.tile_text {
+  padding-left: 10%;
+  padding-top: 5%;
 }

@@ -36,7 +36,7 @@ export default function HandleTie(props) {
   };
 
   return (
-    <div className={"handle_tie_main"}>
+    <div className={"handle_tie_main"} id={"handle_tie_top"}>
       {aiMove && userMove && outcome !== "tie" ? (
         <div>
           <p>You played {userMove}.</p>
