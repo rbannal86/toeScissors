@@ -94,9 +94,9 @@ export default function Board() {
     setBoardUpdated(false);
   }, [aiHeldTiles, board, tieToggle, userHeldTiles, victory]);
 
-  // useEffect(() => {
-  //   if (boardUpdated) setBoardUpdated(false);
-  // }, [boardUpdated]);
+  useEffect(() => {
+    if (boardUpdated) setBoardUpdated(false);
+  }, [boardUpdated]);
 
   useEffect(() => {
     if (boardUpdated) countTotals();
@@ -130,8 +130,8 @@ export default function Board() {
     }
     setCurrentTile(" ");
     setBoard(updatedBoard);
-    // setBoardUpdated(true);
-
+    setBoardUpdated(true);
+    // countTotals();
     if (checkUserWins()) setVictory("You Win!");
     if (checkAiWins()) setVictory("The Computer Has Won!");
   };
@@ -160,6 +160,7 @@ export default function Board() {
     updatedBoard[tile].outcome = outcome;
     setBoard(board);
     setBoardUpdated(true);
+    // countTotals();
     if (checkUserWins()) setVictory("You Win!");
     if (checkAiWins()) setVictory("The Computer Has Won!");
   };
@@ -185,20 +186,30 @@ export default function Board() {
         aiDifficulty={aiDifficulty}
       />
       <Scoreboard userTiles={userHeldTiles} aiTiles={aiHeldTiles} />
-      <h2>{victory}</h2>
-      <div className={"board_display"}>{renderBoard()}</div>
-      {victory ? (
-        <button onClick={() => resetBoard()}>New Game</button>
-      ) : tieToggle ? (
+      {tieToggle ? (
         <HandleTie
           tieList={tieList}
           setTieList={setTieList}
           setTieToggle={setTieToggle}
           updateBoardAfterTie={updateBoardAfterTie}
         />
-      ) : (
-        <Buttons currentTile={currentTile} handleMove={handleMove} />
-      )}
+      ) : null}
+
+      {victory ? (
+        <div className={"board_victory_div"}>
+          <h2 className={"board_victory"}>{victory}</h2>
+        </div>
+      ) : null}
+      <div className={"board_display"}>{renderBoard()}</div>
+      <div className={"board_buttons"}>
+        {victory ? (
+          <button onClick={() => resetBoard()} className={"board_button"}>
+            New Game
+          </button>
+        ) : (
+          <Buttons currentTile={currentTile} handleMove={handleMove} />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,30 @@
+.difficulty_select_main {
+  border: 4px solid #f8f8f8;
+  border-radius: 3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  background-color: #e45c10;
+  margin-bottom: 3%;
+}
+
+.difficulty_select_button {
+  width: 32%;
+  font-family: inherit;
+  padding: 5%;
+  font-size: 0.8rem;
+  font-weight: bolder;
+  border-style: none;
+  color: #fcfcfc;
+  border-radius: 3%;
+  font-family: "Press Start 2P", cursive;
+  background-color: inherit;
+  text-shadow: 2px 2px black;
+}
+
 .difficulty_select_button:disabled {
-  color: teal;
-  border: 2px teal solid;
+  background-color: #f8b800;
+  border: 2px solid #881400;
 }

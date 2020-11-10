@@ -1,0 +1,37 @@
+.handle_tie_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 4px solid #f8f8f8;
+  background-color: #e45c10;
+  color: #fcfcfc;
+  padding: 3%;
+  text-align: center;
+  margin-top: 3%;
+}
+
+.handle_tie_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.handle_tie_button {
+  background-color: #f8b800;
+  padding: 5%;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #f8f8f8;
+  border-radius: 3%;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.9rem;
+}
+
+.handle_tie_confirm {
+  width: 120px;
+}
+
+.handle_tie_image {
+  width: 50px;
+  height: 50px;
+}

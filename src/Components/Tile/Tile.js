@@ -96,7 +96,7 @@ const Tile = React.memo((props) => {
   };
 
   return (
-    <div
+    <button
       className={
         "tile_main " +
         aiMove +
@@ -114,7 +114,7 @@ const Tile = React.memo((props) => {
       {outcome === "ai wins" ? <h3 className={"tile_image"}>X</h3> : null}
       {outcome === "user wins" ? <h3 className={"tile_image"}>O</h3> : null}
       {outcome === "tie" ? <h3 className={"tile_image"}>!</h3> : null}
-    </div>
+    </button>
   );
 });
 
