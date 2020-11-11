@@ -1,7 +1,6 @@
 const AI = {
   //random movement
   aiMove() {
-    console.log("random move");
     return {
       tile: Math.floor(Math.random() * 25),
       move: Math.floor(Math.random() * 3),

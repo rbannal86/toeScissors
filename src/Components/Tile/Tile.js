@@ -73,7 +73,6 @@ const Tile = React.memo((props) => {
         props.setCurrentMove("rock");
         break;
       default:
-        console.log("break");
         break;
     }
   };

@@ -114,9 +114,6 @@ export default function Board() {
     if (aiDifficulty === "medium") aiMove = AI.aiMoveMedium(board);
     if (aiDifficulty === "hard") aiMove = AI.aiMoveHard(board, currentAiMove);
 
-    console.log("ai move", aiMove.tile);
-    console.log("user move", currentTile);
-
     let tiedTiles = [];
     updatedBoard[currentTile].userMove = currentMove;
 
@@ -139,7 +136,6 @@ export default function Board() {
     setCurrentTile(" ");
     setBoard(updatedBoard);
     setBoardUpdated(true);
-    // countTotals();
     checkWins();
   };
 

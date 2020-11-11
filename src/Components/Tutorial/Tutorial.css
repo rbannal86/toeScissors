@@ -1,0 +1,122 @@
+.tutorial_main {
+  width: inherit;
+  background-color: #e45c10;
+  border: 4px solid #f8f8f8;
+  margin-bottom: 3%;
+}
+
+.tutorial_title {
+  text-align: center;
+  text-shadow: 1px 1px white;
+  width: 100%;
+}
+
+.tutorial_copy {
+  color: #fcfcfc;
+  font-size: 1rem;
+  line-height: 1.3rem;
+  /* text-align: left; */
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.tutorial_table_of_contents {
+  width: 80%;
+  border: 3px solid #f8f8f8;
+  margin: auto;
+  background-color: #f8b800;
+  line-height: 1.6rem;
+  margin-bottom: 3%;
+}
+
+.tutorial_contents {
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+.tutorial_contents_item {
+  font-size: 1.2rem;
+}
+
+.tutorial_sections {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  margin-top: 3%;
+}
+
+.tutorial_image {
+  width: 60%;
+  margin: auto;
+  margin-bottom: 5%;
+  border: 2px solid #f8f8f8;
+}
+
+.tutorial_section {
+  border: 3px solid #f8f8f8;
+  width: 95%;
+  margin: auto;
+  margin-bottom: 3%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  text-align: left;
+  align-items: center;
+}
+
+.tutorial_move_section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 80%;
+  border: 3px solid #f8f8f8;
+  background-color: #f8b800;
+}
+
+.tutorial_move_img {
+  height: 50px;
+  width: 50px;
+}
+
+.tutorial_sections div.tutorial_section:nth-child(even) {
+  background-color: #a80020;
+}
+
+.tutorial_sections div.tutorial_section:nth-child(odd) {
+  background-color: #6844fc;
+}
+
+@media only screen and (min-width: 750px) {
+  .tutorial_table_of_contents {
+    width: 60%;
+  }
+
+  .tutorial_image {
+    width: 25%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .tutorial_header {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+  }
+
+  .tutorial_copy {
+    font-size: 1.6rem;
+  }
+
+  .tutorial_image {
+    width: 10%;
+    margin-bottom: 1%;
+  }
+
+  .tutorial_table_of_contents {
+    width: 40%;
+  }
+}

@@ -6,7 +6,6 @@ const aiLogicEasy = {
     if (board[aiMove].aiMove === null)
       return { aiMove: aiMove, aiChoice: aiChoice };
     else {
-      console.log("AI ALREADY MOVED HERE");
       return this.makeMove(board);
     }
   },

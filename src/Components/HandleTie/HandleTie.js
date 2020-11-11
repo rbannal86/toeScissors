@@ -17,7 +17,6 @@ export default function HandleTie(props) {
     props.updateBoardAfterTie(props.tieList[0], outcome);
     let updatedList = [...props.tieList];
     updatedList.shift();
-    console.log(updatedList);
     if (updatedList.length === 0) props.setTieToggle(false);
     props.setTieList(updatedList);
     setUserMove(null);

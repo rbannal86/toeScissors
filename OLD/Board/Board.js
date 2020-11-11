@@ -57,7 +57,6 @@ function Board() {
     setCurrentSelect({ id: null, item: 0 });
     setBoard(updatedBoard);
     let outcome = aiLogic.makeMove(board);
-    console.log(outcome);
     if (outcome.message === "tie") {
       setFeedback("It's a tie!");
       setTieBreaker(true);
