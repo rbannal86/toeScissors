@@ -48,6 +48,10 @@ export default function Board() {
   const [currentMove, setCurrentMove] = useState();
   const [currentAiMove, setCurrentAiMove] = useState(" ");
 
+  //Previous Turn Information
+  const [lastUserPlay, setLastUserPlay] = useState(false);
+  const [lastAiPlay, setLastAiPlay] = useState(false);
+
   //Difficulty setting
   const [aiDifficulty, setAiDifficulty] = useState("medium");
 
@@ -165,6 +169,8 @@ export default function Board() {
       });
       setTieList(newTiedTiles);
     }
+    setLastAiPlay(aiMove.tile);
+    setLastUserPlay(currentTile);
     setCurrentTile(" ");
     setBoard(updatedBoard);
     setBoardUpdated(true);
@@ -187,6 +193,8 @@ export default function Board() {
           board={board}
           boardUpdated={boardUpdated}
           victory={victory}
+          lastAiPlay={lastAiPlay}
+          lastUserPlay={lastUserPlay}
         />
       );
     });
@@ -214,6 +222,8 @@ export default function Board() {
     setBoardUpdated(false);
     setUserHeldTiles(0);
     setAiHeldTiles(0);
+    setLastUserPlay(null);
+    setLastAiPlay(null);
   };
 
   //Returns all of the relevant components

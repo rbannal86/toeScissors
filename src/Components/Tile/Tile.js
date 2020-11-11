@@ -6,6 +6,7 @@ const Tile = React.memo((props) => {
   const [userMove, setUserMove] = useState(props.tileState.userMove);
   const [activeTile, setActiveTile] = useState();
   const [ownerTile, setOwnerTile] = useState();
+  const [lastPlay, setLastPlay] = useState();
 
   //When the current tile prop or the userMove changes, this will either return the
   //tile to its original (empty) state so nothing shows on the board, or make sure that
@@ -17,6 +18,20 @@ const Tile = React.memo((props) => {
     if (props.currentTile === props.tileIndex && userMove === "none")
       setUserMove("rock");
   }, [props, userMove]);
+
+  //Sets the lastPlay state value to show a border that indicates the tile was last played by the
+  //user, ai, or both. Will render the tile with an appropriate border to show that the tile was the
+  //last one selected
+  useEffect(() => {
+    if (
+      props.lastAiPlay === props.tileIndex &&
+      props.lastUserPlay === props.tileIndex
+    )
+      setLastPlay("played_both");
+    else if (props.lastAiPlay === props.tileIndex) setLastPlay("played_ai");
+    else if (props.lastUserPlay === props.tileIndex) setLastPlay("played_user");
+    else setLastPlay(null);
+  }, [lastPlay, props.lastAiPlay, props.lastUserPlay, props.tileIndex]);
 
   //Toggles the active tile state. Determines if the tile needs to have
   //a border or not.
@@ -128,7 +143,16 @@ const Tile = React.memo((props) => {
   //the tile. ! displays when there is a tie in the tile.
   return (
     <button
-      className={"tile_main " + tieFocus + " " + activeTile + " " + ownerTile}
+      className={
+        "tile_main " +
+        tieFocus +
+        " " +
+        activeTile +
+        " " +
+        ownerTile +
+        " " +
+        lastPlay
+      }
       onClick={() => handleClick()}
       disabled={props.victory ? true : false}
     >
