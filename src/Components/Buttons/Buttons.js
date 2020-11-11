@@ -3,6 +3,11 @@ import "./Buttons.css";
 
 export default function Buttons(props) {
   const [toggleForfeit, setToggleForfeit] = useState(false);
+
+  //Control buttons for the game board. Confirm finalizes a selected move. Is disabled until
+  //the user actually chooses a move. Forfeit renders a confirmation dialog. Cancel goes back,
+  //confirm sets a victory condition and new game button. Any victory condition will also switch
+  //to a new game button. The new game button will reset the board and all relevant state values.
   return (
     <div className={"buttons_main"}>
       {toggleForfeit ? (

@@ -13,6 +13,9 @@ export default function HandleTie(props) {
 
   const moveList = ["Rock", "Paper", "Scissors"];
 
+  //Sends the tile index and outcome to the board. If there are
+  //no more ties to settle, switches the tie toggle to close
+  //the tie handling component.
   const returnTieOutcome = () => {
     props.updateBoardAfterTie(props.tieList[0], outcome);
     let updatedList = [...props.tieList];
@@ -24,6 +27,7 @@ export default function HandleTie(props) {
     setOutcome(null);
   };
 
+  //Compares the user's and computer's moves. If it's a tie, restarts the process.
   const handleTie = (userMove) => {
     setTie(false);
     let aiMove = AI.aiTie();
@@ -34,6 +38,12 @@ export default function HandleTie(props) {
     if (outcome === "tie") setTie(true);
   };
 
+  //Displays feedback based on the stage of handling a tie. If it's the first round,
+  //shows text that tells the player what to do and the three moves to choose from.
+  //If it's another tie, shows what each player played and the moves to choose from.
+  //If someone won, shows the moves played, the outcome, and a confirmation button that,
+  //when clicked, goes to returnTieOutcome to handle updating the board and closing
+  //the tie handling component.
   return (
     <div className={"handle_tie_main"} id={"handle_tie_top"}>
       {aiMove && userMove && outcome !== "tie" ? (

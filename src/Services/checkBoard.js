@@ -1,9 +1,5 @@
 const checkBoard = {
-  afterConfirm: (userTile, aiTile) => {
-    if (userTile === aiTile) return true;
-    else return false;
-  },
-
+  //Determines the outcome of a rock paper scissors round
   compareMoves: (userMove, aiMove) => {
     if (userMove === aiMove) return "tie";
     else if (userMove === 0 && aiMove === 2) return "user wins";
@@ -12,6 +8,7 @@ const checkBoard = {
     else return "ai wins";
   },
 
+  //Diagonal check for victory
   checkDiagonalLeftToRight(board, playerMove, boardOwner) {
     let tileArray = [0, 6, 12, 18, 24];
     let outcome = true;
@@ -23,6 +20,7 @@ const checkBoard = {
     return outcome;
   },
 
+  //Diagonal check for victory
   checkDiagonalRightToLeft(board, playerMove, boardOwner) {
     let tileArray = [4, 8, 12, 16, 20];
     let outcome = true;
@@ -34,6 +32,7 @@ const checkBoard = {
     return outcome;
   },
 
+  //Horizontal check for victory, recursive
   checkHorizontal(board, move, playerMove, boardOwner) {
     let outcomeList = [];
     let moveList = [];
@@ -51,6 +50,7 @@ const checkBoard = {
     else return false;
   },
 
+  //Vertical check for victory, recursive
   checkVertical(board, move, playerMove, boardOwner) {
     let outcomeList = [];
     let moveList = [];
@@ -68,6 +68,7 @@ const checkBoard = {
     else return false;
   },
 
+  //Checks for ties, sends back an array of tiles that need to have a tie settled
   checkForTies(board) {
     const moveSet = ["rock", "paper", "scissors"];
     let tieArray = [];

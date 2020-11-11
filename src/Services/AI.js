@@ -1,5 +1,5 @@
 const AI = {
-  //random movement
+  //Generates a random tile and move for the AI
   aiMove() {
     return {
       tile: Math.floor(Math.random() * 25),
@@ -7,90 +7,11 @@ const AI = {
     };
   },
 
-  checkRows(board, rowArray = [0, 1, 2, 3, 4]) {
-    let nextArray = [];
-    let emptyIndex = [];
-    let aiBlocks = false;
-    rowArray.forEach((tile, index) => {
-      if (board[tile]?.outcome === "ai wins") aiBlocks = true;
-      else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
-        emptyIndex.push(tile);
-      else if (board[tile].outcome === "user wins") emptyIndex.push(null);
-      nextArray[index] = tile + 5;
-    });
-    if (aiBlocks === true) {
-      if (Math.max(nextArray) >= 25) return false;
-      else return this.checkColumns(board, nextArray);
-    } else if (emptyIndex.length >= 3 && emptyIndex.length < 5) {
-      emptyIndex = emptyIndex.filter(
-        (item) => item || item?.toString() === "0"
-      );
-      let index = Math.floor(Math.random() * emptyIndex.length);
-      return emptyIndex[index];
-    } else if (Math.max(nextArray) < 25) {
-      return this.checkRows(board, nextArray);
-    } else return false;
-  },
-
-  checkColumns(board, columnArray = [0, 5, 10, 15, 20]) {
-    let nextArray = [];
-    let emptyIndex = [];
-    let aiBlocks = false;
-    columnArray.forEach((tile, index) => {
-      if (board[tile]?.outcome === "ai wins") aiBlocks = true;
-      else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
-        emptyIndex.push(tile);
-      else if (
-        board[tile].outcome === "user wins" ||
-        board[tile].aiMove !== "none"
-      )
-        emptyIndex.push(null);
-      nextArray[index] = tile + 1;
-    });
-    if (aiBlocks === true) {
-      if (Math.max(nextArray) >= 25) return false;
-      else return this.checkColumns(board, nextArray);
-    } else if (emptyIndex.length >= 3 && emptyIndex.length <= 5) {
-      emptyIndex = emptyIndex.filter(
-        (item) => item || item?.toString() === "0"
-      );
-      let index = Math.floor(Math.random() * emptyIndex.length);
-      return emptyIndex[index];
-    } else if (Math.max(nextArray) < 25)
-      return this.checkColumns(board, nextArray);
-    else return false;
-  },
-
-  checkDiagonals(board, diagonalArray = [0, 6, 12, 18, 24], final = false) {
-    let nextArray = [4, 8, 12, 16, 20];
-    let emptyIndex = [];
-    let aiBlocks = false;
-    diagonalArray.forEach((tile) => {
-      if (board[tile].outcome === "ai wins") aiBlocks = true;
-      else if (board[tile].aiMove === "none" && board[tile].userMove !== "none")
-        emptyIndex.push(tile);
-      else if (
-        board[tile].outcome === "user wins" ||
-        board[tile].aiMove !== "none"
-      )
-        emptyIndex.push(null);
-    });
-    if (aiBlocks === true) {
-      if (!final) return this.checkDiagonals(board, nextArray, true);
-      else return false;
-    } else if (emptyIndex.length >= 3 && emptyIndex.length <= 5) {
-      emptyIndex = emptyIndex.filter(
-        (item) => item || item?.toString() === "0"
-      );
-      let index = Math.floor(Math.random() * emptyIndex.length);
-
-      return emptyIndex[index];
-    } else if (!final) return this.checkDiagonals(board, nextArray, true);
-    else return false;
-  },
-
   //plays defensively by blocking user streaks when available
   //or goes back to random movement
+  //Checks each row, column, and diagonal for a streak of three unblocked user moves or more,
+  //then chooses one of those tiles for the next move. If an ai-owned tile exists in that
+  //batch of tiles, automatically skips over it.
   checkForBlocks(board) {
     //check rows
     for (let i = 0; i <= 20; i = i + 5) {
@@ -240,6 +161,8 @@ const AI = {
     }
   },
 
+  //Main controller for medium difficulty. Checks the outcome from the block checks to
+  //determine if it's a valid move. If not, it calls the randomizer.
   aiMoveMedium(board, difficulty = "medium") {
     let tile = this.checkForBlocks(board);
     if ((tile || tile?.toString() === "0") && board[tile].aiMove === "none") {
@@ -249,6 +172,8 @@ const AI = {
     } else return this.aiMove();
   },
 
+  //Scans row for hard difficulty. Finds the highest-scoring row and sends it back to
+  //the controller for a final processing.
   aiHardScanRows(board, rowArray = [0, 1, 2, 3, 4], resultsArray = []) {
     let newMoveArray = [...rowArray];
     let newRowArray = [];
@@ -284,6 +209,7 @@ const AI = {
     } else return this.aiHardScanRows(board, newRowArray, newResultsArray);
   },
 
+  //Same as the previous function, but for columns.
   aiHardScanColumns(
     board,
     columnArray = [0, 5, 10, 15, 20],
@@ -325,6 +251,7 @@ const AI = {
       return this.aiHardScanColumns(board, newColumnArray, newResultsArray);
   },
 
+  //Same as the previous, for diagonals
   aiHardScanDiagonal(board, diagonalArray) {
     let moveArray = [...diagonalArray];
     let score = 0;
@@ -353,6 +280,8 @@ const AI = {
     return resultsObject;
   },
 
+  //Takes the results from the last functions and finds the highest scoring, then randomly
+  //chooses one of those tiles.
   aiHardChooseMove(board) {
     let possibleMoves = [];
     possibleMoves.push(this.aiHardScanRows(board)[4]);
@@ -396,6 +325,7 @@ const AI = {
     }
   },
 
+  //Determines the move when the ai and user tie
   aiTie: () => {
     return Math.floor(Math.random() * 3);
   },

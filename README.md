@@ -1,68 +1,33 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## TOE SCISSORS
 
-## Available Scripts
+### Overview
 
-In the project directory, you can run:
+TOE SCISSORS is a blend of Rock Paper Scissors and Tic-Tac-Toe wrapped in a retro 8-bit theme. The interface and rules are simple,
+but the AI difficulties ramp up in complexity. Combining the strategic elements of Tic-Tac-Toe on a 5x5 grid and the head-to-head battles of Rock Paper Scissors, the computer can act completely randomly on the easiest settings, to aggressively on the hardest.
 
-### `npm start`
+### Features
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### User Guide
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The comprehensive user guide covers the rules and flow of the game, from the synchronous turns, to tie breakers.
 
-### `npm test`
+#### Game Board
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The main view of the game features the game board, a scoreboard that keeps track of the number of tiles owned by each player, and conditionally rendered victory feedback and tie-handling. Each move that a user can make is represented by a custom-made 8-bit icon,
+and the colors are based on the original 8-bit Nintendo color scheme, with each tile showing color and icon feedback indicative of its current state.
 
-### `npm run build`
+#### Victory Conditions
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The player and the computer share a turn, each making a move at the same time. Both players choose a tile and either rock, paper, or scissors. When both players have played a move on a tile, the tile goes to whoever won that battle of Rock Paper Scissors. A tie is settled by a new round of Rock Paper Scissors until a winner is declared. Victory goes to the user who achieves five owned or played-on tiles in a row, either horizontally, vertically, or diagonally. If the end of the game is reached and no one has connected five tiles, whoever controls the most tiles wins.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+#### The Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This a front end app. It was built using React.js, JavaScript, HTML, and CSS.
 
-### `npm run eject`
+#### Links
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Live Site: https://toescissors.vercel.app/
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Github Repo: https://github.com/rbannal86/toeScissors
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Created by Alex Bannow, 2020

@@ -2,6 +2,9 @@ import React from "react";
 import "./DifficultySelect.css";
 
 export default function DifficultySelect(props) {
+  //Buttons to choose difficulty. If the difficulty is set, the corresponding button
+  //is disabled and the styling affects the disabled button to show that it is
+  //the currently selected difficulty.
   return (
     <div className={"difficulty_select_main"}>
       <button

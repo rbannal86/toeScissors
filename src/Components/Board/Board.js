@@ -39,23 +39,34 @@ export default function Board() {
     { userMove: "none", aiMove: "none", outcome: null },
     { userMove: "none", aiMove: "none", outcome: null },
   ];
+
+  //Current board state
   const [board, setBoard] = useState(defaultBoard);
 
+  //Current turn information
   const [currentTile, setCurrentTile] = useState(" ");
   const [currentMove, setCurrentMove] = useState();
   const [currentAiMove, setCurrentAiMove] = useState(" ");
+
+  //Difficulty setting
   const [aiDifficulty, setAiDifficulty] = useState("medium");
 
+  //Count for currently owned tiles. Used to determine winner when board is full.
   const [userHeldTiles, setUserHeldTiles] = useState(0);
   const [aiHeldTiles, setAiHeldTiles] = useState(0);
 
+  //Tie handling state
   const [tieToggle, setTieToggle] = useState(false);
   const [tieList, setTieList] = useState([]);
 
+  //Victory message
   const [victory, setVictory] = useState(null);
 
+  //Toggle for updating the board in certain circumstances
   const [boardUpdated, setBoardUpdated] = useState(false);
 
+  //Check if the user wins. useCallback so that this can be used in useEffect and
+  //outside
   const checkUserWins = useCallback(() => {
     if (
       checkBoard.checkVertical(board, 0, "userMove", "ai wins") ||
@@ -67,6 +78,8 @@ export default function Board() {
     else return false;
   }, [board]);
 
+  //Check if ai wins. useCallback so that this can be used in useEffect and
+  //outside
   const checkAiWins = useCallback(() => {
     if (
       checkBoard.checkVertical(board, 0, "aiMove", "user wins") ||
@@ -78,6 +91,9 @@ export default function Board() {
     else return false;
   }, [board]);
 
+  //Determines the number of tiles owned by each player. If there are no tiles
+  //without an outcome ('user wins', 'ai wins'), calls the game and checks which
+  //player has the most owned tiles and sets an appropriate victory message.
   const countTotals = useCallback(() => {
     let userOwned = board.filter((tile) => tile.outcome === "user wins").length;
     let aiOwned = board.filter((tile) => tile.outcome === "ai wins").length;
@@ -94,19 +110,35 @@ export default function Board() {
     setBoardUpdated(false);
   }, [aiHeldTiles, board, tieToggle, userHeldTiles, victory]);
 
+  //Switches the boardUpdated toggle to force rerender when necessary
   useEffect(() => {
     if (boardUpdated) setBoardUpdated(false);
   }, [boardUpdated]);
 
+  //Calls the count totals function when the board updates. Guarantees
+  //the count updates after every event.
   useEffect(() => {
     if (boardUpdated) countTotals();
   }, [boardUpdated, countTotals]);
 
+  //Calls the check functions and, if one is true, sets the appropriate victory message.
   const checkWins = () => {
     if (checkUserWins()) setVictory("You Win!");
     if (checkAiWins()) setVictory("The Computer Has Won!");
   };
 
+  //Called after a user confirms a move.
+  //Goes through this flow:
+  //Copies the board.
+  //Creates and aiMove and sets its value based on the difficulty.
+  //Sets the currently selected tile and sets the user move for that tile.
+  //Checks if the ai is actually choosing a new tile, and restarts if it isn't. Updates the board with the new ai move.
+  //Checks the board for ties and populates the tiedTiles array with any tie's index.
+  //Toggles the tie handling component if any ties exist.
+  //Clears state involving current turn.
+  //Updates the board with the new moves.
+  //Toggles the boardUpdated state to rerender.
+  //Checks if anyone won after this round.
   const handleMove = () => {
     let updatedBoard = [...board];
     let aiMove;
@@ -139,6 +171,7 @@ export default function Board() {
     checkWins();
   };
 
+  //Renders the board.
   const renderBoard = () => {
     return board.map((tile, index) => {
       return (
@@ -159,19 +192,19 @@ export default function Board() {
     });
   };
 
+  //Updates the board after handling a tie
   const updateBoardAfterTie = (tile, outcome) => {
     let updatedBoard = [...board];
     updatedBoard[tile].outcome = outcome;
     setBoard(board);
     setBoardUpdated(true);
-    // countTotals();
     if (checkUserWins()) setVictory("You Win!");
     if (checkAiWins()) setVictory("The Computer Has Won!");
   };
 
+  //Resets the board after confirming a forfeit or starting a new game.
   const resetBoard = () => {
     setBoard(defaultBoard);
-
     setCurrentTile(" ");
     setCurrentMove();
     setCurrentAiMove(" ");
@@ -183,6 +216,7 @@ export default function Board() {
     setAiHeldTiles(0);
   };
 
+  //Returns all of the relevant components
   return (
     <div className={"board_main"}>
       <DifficultySelect
