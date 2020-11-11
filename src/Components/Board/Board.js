@@ -101,18 +101,19 @@ export default function Board() {
   const countTotals = useCallback(() => {
     let userOwned = board.filter((tile) => tile.outcome === "user wins").length;
     let aiOwned = board.filter((tile) => tile.outcome === "ai wins").length;
+
+    setAiHeldTiles(aiOwned);
+    setUserHeldTiles(userOwned);
+    setBoardUpdated(false);
     if (
       board.filter((tile) => tile.outcome === null).length === 0 &&
       !victory &&
       !tieToggle
     )
-      if (aiHeldTiles > userHeldTiles)
+      if (aiOwned > userOwned)
         setVictory("The Computer Holds More Tiles. It Wins!");
       else setVictory("You Hold More Tiles! You Win!");
-    setAiHeldTiles(aiOwned);
-    setUserHeldTiles(userOwned);
-    setBoardUpdated(false);
-  }, [aiHeldTiles, board, tieToggle, userHeldTiles, victory]);
+  }, [board, tieToggle, victory]);
 
   //Switches the boardUpdated toggle to force rerender when necessary
   useEffect(() => {
@@ -175,6 +176,11 @@ export default function Board() {
     setBoard(updatedBoard);
     setBoardUpdated(true);
     checkWins();
+    toggleBoardUpdate();
+  };
+
+  const toggleBoardUpdate = () => {
+    setBoardUpdated(true);
   };
 
   //Renders the board.
