@@ -22,7 +22,7 @@ The player and the computer share a turn, each making a move at the same time. B
 
 #### The Stack
 
-This a front end app. It was built using React.js, JavaScript, HTML, and CSS.
+This is a front end app. It was built using React.js, JavaScript, HTML, and CSS.
 
 #### Links
 
